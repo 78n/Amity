@@ -1,5 +1,5 @@
 local old
-old = hookfunction(Instance.new,function(instance,parent,...)
+old = hookfunction(Instance.new,function(instance,parent)
     if checkcaller() then
         rconsoleprint("@@LIGHT_GREEN@@")
         rconsoleprint(("New Instance: %s\n"):format(instance))
@@ -7,7 +7,7 @@ old = hookfunction(Instance.new,function(instance,parent,...)
             rconsoleprint("@@YELLOW@@")
             rconsoleprint(("Instance Parent: %s\n"):format(tostring(parent)))
         end
-        return old(instance,parent,...)
+        return old(instance,parent)
     end
-    return old(instance,parent,...)
+    return old(instance,parent)
 end)
