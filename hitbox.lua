@@ -17,7 +17,7 @@ for i,v in next, Players:GetPlayers() do
             local hrp = humanoid.RootPart
             hrp.Size = Vector3.new(size,size,size)
             hrp.CanCollide = false
-            humanoid.Died:Connect(function()
+            hrp:GetPropertyChangedSignal('CanCollide'):Connect(function()
                 hrp.CanCollide = false
             end)
         end
@@ -28,7 +28,7 @@ for i,v in next, Players:GetPlayers() do
             
             humanoid.RootPart.Size = Vector3.new(size,size,size)
             humanoid.RootPart.CanCollide = false
-            humanoid.Died:Connect(function()
+            humanoid.RootPart:GetPropertyChangedSignal('CanCollide'):Connect(function()
                 humanoid.RootPart.CanCollide = false
             end)
         end)
@@ -43,7 +43,7 @@ Players.PlayerAdded:Connect(function(plr)
         
         humanoid.RootPart.Size = Vector3.new(size,size,size)
         humanoid.RootPart.CanCollide = false
-        humanoid.Died:Connect(function()
+        humanoid.RootPart:GetPropertyChangedSignal('CanCollide'):Connect(function()
             humanoid.RootPart.CanCollide = false
         end)
     end)
