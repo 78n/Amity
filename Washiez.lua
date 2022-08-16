@@ -5,7 +5,7 @@ local backpack = lp:FindFirstChildWhichIsA("Backpack")
 
 local function path()
     for i,v in next, game:GetService("Workspace"):GetDescendants() do
-        if v:IsA("ProximityPrompt") and v.Parent:IsA("MeshPart") then
+        if v:IsA("ProximityPrompt") and v.Parent:IsA("MeshPart") and v.ObjectText:match("Ice Cream Cone") then
             return v.Parent
         end
     end
