@@ -21,6 +21,7 @@ repeat
     fireproximityprompt(proximityprompt)
 until #backpack:GetChildren() >= 300
 
+lp.Character:FindFirstChild("RightHand"):Destroy()
 lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = oldpos
 rs.Heartbeat:Wait()
 
@@ -29,8 +30,3 @@ for i,v in next, backpack:GetChildren() do
         v.Parent = lp.Character
     end
 end
-
-lp.Character:FindFirstChild("RightHand"):Destroy()
-
-
-
