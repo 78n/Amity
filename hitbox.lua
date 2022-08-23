@@ -10,41 +10,32 @@ local WaitForChildWhichIsA = function(instance, classtype)
 	return target
 end
 
+local hitbox = function(target_char)
+    local humanoid = WaitForChildWhichIsA(target_char,"Humanoid")
+    repeat task.wait() until humanoid.RootPart
+    local hrp = humanoid.RootPart
+    
+    hrp.Size = Vector3.new(size,size,size)
+    hrp.CanCollide = false
+    hrp:GetPropertyChangedSignal('CanCollide'):Connect(function()
+        hrp.CanCollide = false
+    end)
+end
+    
+
 for i,v in next, Players:GetPlayers() do
     if v ~= lp then
-        if v and v.Character and v.Character:FindFirstChildWhichIsA('Humanoid') and v.Character:FindFirstChildWhichIsA('Humanoid').RootPart then
-            local humanoid = v.Character:FindFirstChildWhichIsA('Humanoid')
-            local hrp = humanoid.RootPart
-            hrp.Size = Vector3.new(size,size,size)
-            hrp.CanCollide = false
-            hrp:GetPropertyChangedSignal('CanCollide'):Connect(function()
-                hrp.CanCollide = false
-            end)
+        if v.Character then
+            hitbox(v.Character)
         end
         v.CharacterAdded:Connect(function(char)
-            local humanoid = WaitForChildWhichIsA(char,'Humanoid')
-            
-            repeat task.wait() until humanoid.RootPart
-            
-            humanoid.RootPart.Size = Vector3.new(size,size,size)
-            humanoid.RootPart.CanCollide = false
-            humanoid.RootPart:GetPropertyChangedSignal('CanCollide'):Connect(function()
-                humanoid.RootPart.CanCollide = false
-            end)
+            hitbox(char)
         end)
     end
 end
 
 Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
-        local humanoid = WaitForChildWhichIsA(char,'Humanoid')
-        
-        repeat task.wait() until humanoid.RootPart
-        
-        humanoid.RootPart.Size = Vector3.new(size,size,size)
-        humanoid.RootPart.CanCollide = false
-        humanoid.RootPart:GetPropertyChangedSignal('CanCollide'):Connect(function()
-            humanoid.RootPart.CanCollide = false
-        end)
+        hitbox(char)
     end)
 end)
