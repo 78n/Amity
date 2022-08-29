@@ -7,4 +7,4 @@ local games = {
 if games[placeid] then
     return games[placeid]
 end
-return ''
+return ' '
