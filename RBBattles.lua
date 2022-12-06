@@ -18,3 +18,13 @@ for i,v in next, workspace:WaitForChild("OuterCity"):WaitForChild("OuterCityRing
     end
 end
     
+--poop autochest thing I made like 3 hours ago im not going to bother debugging it right now so ima just put it in a pcall
+pcall(function()
+    for i,v in next, workspace.OuterCity:GetChildren() do
+        if v.Name:find("Chest") then
+            setstate:InvokeServer(true)
+            lp.Character.HumanoidRootPart.CFrame = v.Hitbox.CFrame
+            rs.Heartbeat:Wait()
+        end
+    end
+end)
