@@ -1,11 +1,7 @@
-local configs = configs or {
+local configs = getgenv().configs or {
     autoserverhop = false,
     nonametag = false
 }
-
-for i,v in next, configs do
-    print(i,v)
-end
 
 repeat task.wait() until game:IsLoaded()
 
@@ -80,7 +76,6 @@ if configs["autoserverhop"] then
     if syn then request = syn.request end
 
     if queueteleport and request then
-        print("Server hopping")
         local PlaceId = game.PlaceId
         local http = game:GetService("HttpService")
         local function jsone(str) return http:JSONEncode(str) end
