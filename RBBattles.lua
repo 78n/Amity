@@ -1,3 +1,4 @@
+repeat task.wait() until game:IsLoaded()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:FindService("Players")
 local rs = game:FindService("RunService")
@@ -13,30 +14,32 @@ PlayerService:WaitForChild("SetState_WantsToCompete"):InvokeServer(false)
 repeat task.wait() until lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
 local RootPart = lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
 
-local function touchchest(model)
-    for i,v in next, model:GetDescendants() do
-        if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
-            if not RootPart then break end
-            setregion:InvokeServer(true)
-            pcall(function()
-                firetouchinterest(RootPart,v.Parent,0) --randomly errors
-            end)
+if firetouchinterest then --no idea why you wouldnt have firetouchinterest
+    local function touchchest(model)
+        for i,v in next, model:GetDescendants() do
+            if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
+                if not RootPart then break end
+                setregion:InvokeServer(true)
+                pcall(function()
+                    firetouchinterest(RootPart,v.Parent,0) --randomly errors
+                end)
+            end
         end
     end
-end
-
-OuterCity.ChildAdded:Connect(function(v)
-    if v:IsA("Model") and v.Name:find("SmallChest") then
-        repeat
+    
+    OuterCity.ChildAdded:Connect(function(v)
+        if v:IsA("Model") and v.Name:find("SmallChest") then
+            repeat
+                touchchest(v)
+                wait(1)
+            until not v
+        end
+    end)
+    
+    for i,v in next, OuterCity:GetChildren() do
+        if v:IsA("Model") then
             touchchest(v)
-            wait(1)
-        until not v
-    end
-end)
-
-for i,v in next, OuterCity:GetChildren() do
-    if v:IsA("Model") then
-        touchchest(v)
+        end
     end
 end
 
