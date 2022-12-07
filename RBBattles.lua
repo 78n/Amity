@@ -76,14 +76,21 @@ if configs["autoserverhop"] then
     if syn then request = syn.request end
 
     if queueteleport and request then
-        local PlaceId = game.PlaceId
         local http = game:GetService("HttpService")
+        local PlaceId = game.PlaceId
+        local queueconfigs = ""
+        local servers = {}
+        
         local function jsone(str) return http:JSONEncode(str) end
         local function jsond(str) return http:JSONDecode(str) end
-        queueteleport([[loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()]])
+        
+        for i,v in next, _G.configs do
+            queueconfigs = ("%s%s = %s,\n"):format(a,i,tostring(v))
+        end
+
+        queueteleport(("_G.configs = {%s} loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()"):format(queueconfigs))
         local TeleportService = game:GetService("TeleportService")
     
-        local servers = {}
         local cursor = ''
     
         while cursor and #servers == 0 do
