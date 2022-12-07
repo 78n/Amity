@@ -1,4 +1,4 @@
-local configs = getgenv().configs or {
+local configs = _G.configs or {
     autoserverhop = false,
     nonametag = false
 }
