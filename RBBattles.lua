@@ -1,7 +1,10 @@
 local configs = _G.configs or {
-    autoserverhop = false,
-    nonametag = false
+    autoserverhop = "false",
+    nonametag = "false"
 }
+
+local autoserverhop = tostring(configs["autoserverhop"])
+local nonametag = tostring(configs["nonametag"])
 
 repeat task.wait() until game:IsLoaded()
 
@@ -20,7 +23,7 @@ PlayerService:WaitForChild("SetState_WantsToCompete"):InvokeServer(false)
 repeat task.wait() until lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
 local RootPart = lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
 
-if configs["nonametag"] then
+if nonametag:match("true") then
     for i,v in next, RootPart:GetChildren() do
         if v:IsA("BillboardGui") then
             v:Destroy()
@@ -68,5 +71,51 @@ for i,v in next, OuterCity:WaitForChild("OuterCityRing1Obstacles"):WaitForChild(
                 CollectCoin:FireServer(v:FindFirstChildWhichIsA("IntValue").Value)
             end
         until not v:FindFirstChildWhichIsA("IntValue")
+    end
+end
+
+if autoserverhop:match("true") then
+    local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport
+    if syn then request = syn.request end
+
+    if queueteleport and request then
+        local http = game:GetService("HttpService")
+        local PlaceId = game.PlaceId
+        local servers = {}
+        
+        local function jsone(str) return http:JSONEncode(str) end
+        local function jsond(str) return http:JSONDecode(str) end
+
+        queueteleport(("_G.configs = {autoserverhop = %s,nonametag = %s} loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()"):format(autoserverhop,nonametag))
+        local TeleportService = game:GetService("TeleportService")
+    
+        local cursor = ''
+    
+        while cursor and #servers == 0 do
+            task.wait()
+            local req = request({
+                Url = ('https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s'):format(PlaceId,cursor)
+            })
+            local body = jsond(req.Body)
+    
+            if body and body.data then
+                task.spawn(function()
+                    for i,v in next, body.data do
+                        if type(v) == 'table' and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers then
+                            table.insert(servers, 1, v.id)
+                        end 
+                    end
+                end)
+    
+                if body.nextPageCursor then
+                    cursor = body.nextPageCursor
+                end
+            end
+        end
+    
+        while #servers > 0 do
+            TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], lp)
+            task.wait(1)
+        end
     end
 end
