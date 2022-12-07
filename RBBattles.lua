@@ -80,7 +80,7 @@ if configs["autoserverhop"] then
         local http = game:GetService("HttpService")
         local function jsone(str) return http:JSONEncode(str) end
         local function jsond(str) return http:JSONDecode(str) end
-        queueteleport([[loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()]])
+        queueteleport([[loadstring(game:HttpGet(https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()]])
         local TeleportService = game:GetService("TeleportService")
     
         local servers = {}
