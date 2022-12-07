@@ -1,6 +1,6 @@
 local configs = configs or {
-    autoserverhop = true,
-    nonametag = true
+    autoserverhop = false,
+    nonametag = false
 }
 
 repeat task.wait() until game:IsLoaded()
