@@ -1,11 +1,14 @@
 local SoundService = game:GetService("SoundService")
 local BadgeService = game:GetService("BadgeService")
+local Players = game:FindService("Players")
 local Heartbeat = game:FindService("RunService").Heartbeat
+repeat task.wait() until Players.LocalPlayer
+local lp = Players.LocalPlayer
 local hahafunnyremote = game:GetService("ReplicatedStorage"):WaitForChild("RF")
 local Platform = workspace:WaitForChild("Map"):WaitForChild("Stages"):WaitForChild("EventStage"):WaitForChild("Pads"):WaitForChild("PadPart")
 
 repeat
-    if lp and lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart then
+    if lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart then
         lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = Platform.CFrame
     end
     Heartbeat:Wait()
