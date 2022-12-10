@@ -1,10 +1,14 @@
 --This is the best you will get
 local function getfolder()
-    for i,v in next, workspace:GetChildren() do
-        if v:IsA("Folder") and tonumber(v.Name) then
-            return v
+    local storage
+    repeat
+        for i,v in next, workspace:GetChildren() do
+            if v:IsA("Folder") and tonumber(v.Name) then
+                storage = v
+            end
         end
-    end
+    until storage
+    return storage
 end
 
 local folder = getfolder()
