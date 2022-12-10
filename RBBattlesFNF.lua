@@ -1,7 +1,7 @@
 local SoundService = game:GetService("SoundService")
 local BadgeService = game:GetService("BadgeService")
 local Players = game:FindService("Players")
-local Heartbeat = game:FindService("RunService").Heartbeat
+local rs = game:FindService("RunService")
 repeat task.wait() until Players.LocalPlayer
 local lp = Players.LocalPlayer
 local hahafunnyremote = game:GetService("ReplicatedStorage"):WaitForChild("RF")
@@ -11,7 +11,7 @@ repeat
     if lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart then
         lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = Platform.CFrame
     end
-    Heartbeat:Wait()
+    rs.Heartbeat:Wait()
 until SoundService:FindFirstChild("rbxassetid://11772514365")
 
 for i = 1,1000 do
