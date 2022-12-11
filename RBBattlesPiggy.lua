@@ -208,7 +208,6 @@ local function getfinalcode()
         wait(1)
         anchoredcheck()
         Part:WaitForChild("ClickEvent"):FireServer()
-        wait(1)
         connections[Part]:Disconnect()
     end
 
