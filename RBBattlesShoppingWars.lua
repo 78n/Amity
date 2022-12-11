@@ -3,11 +3,14 @@ local rs = game:FindService("RunService")
 
 local Items = workspace:WaitForChild("Items")
 local state = true
+local finished = false
 
 local function Collect(v)
     if v:IsA("Model") and v:WaitForChild("Root") then
         repeat
-            fireclickdetector(v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector"))
+            if v and v:FindFirstChild("Root") and v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector") then
+                fireclickdetector(v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector"))
+            end
             wait(0.1)
         until not v or not v:FindFirstChild("Root") or not state
     end
@@ -22,7 +25,9 @@ task.spawn(function()
         if v:IsA("Model") and v:WaitForChild("Root") then
             local debounce = 0
             repeat
-                fireclickdetector(v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector"))
+                if v and v:FindFirstChild("Root") and v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector") then
+                    fireclickdetector(v:FindFirstChild("Root"):FindFirstChildWhichIsA("ClickDetector"))
+                end
                 wait(0.1)
                 debounce += 1
             until not v or not v:FindFirstChild("Root") or debounce >= 20 or not state
@@ -32,13 +37,13 @@ task.spawn(function()
         end
     end
 end)
+
 local Stands = workspace:WaitForChild("CashierStands"):WaitForChild("Stands")
 local Cash1 = Stands:WaitForChild("Cashier1"):WaitForChild("Touch")
 local Cash2 = Stands:WaitForChild("Cashier2"):WaitForChild("Touch")
 local UI = lp:WaitForChild("PlayerGui"):WaitForChild("KeyRoomOpen")
 
 repeat
-    print("Looping until UI enabled",UI.Enabled)
     if lp and lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart then
         lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = Cash1.CFrame
         rs.RenderStepped:Wait()
@@ -69,16 +74,14 @@ end
 local Keycard = workspace:WaitForChild("KeyRoom"):WaitForChild("Keycard"):WaitForChild("Root")
 
 repeat
-    print("Getting keycard",Keycard)
     firepp(Keycard,Keycard:FindFirstChildWhichIsA("ProximityPrompt"))
 until lp.Character and lp.Character:FindFirstChild("Keycard")
 
 local EscapePod = FindEscapePodRoot()
 
 repeat
-    print("Escaping",EscapePod)
-    pcall(function()
+    if EscapePod and EscapePod:FindFirstChildWhichIsA("Attachment") and EscapePod:FindFirstChildWhichIsA("Attachment"):FindFirstChildWhichIsA("ProximityPrompt") then
         firepp(EscapePod,EscapePod:FindFirstChildWhichIsA("Attachment"):FindFirstChildWhichIsA("ProximityPrompt"))
-    end)
+    end
     task.wait()
-until not EscapePod
+until not EscapePod or not EscapePod.Parent
