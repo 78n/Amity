@@ -1,4 +1,3 @@
---This is the best you will get
 local function getfolder()
     local storage
     repeat
@@ -188,13 +187,12 @@ end
 local function getfinalcode()
     local finalcode = ""
     local codebuttons  = {}
-    
     for i,v in next, FinalCodeEvent:GetChildren() do
         if v:IsA("BasePart") then
             if v.Name:find("Number") then
-                finalcode = finalcode..v:FindFirstChild("SurfaceGui"):FindFirstChild("Symbol").Text
+                finalcode = finalcode..v:WaitForChild("SurfaceGui"):WaitForChild("Symbol").Text
             elseif v.Name:find("Symbol") then
-                codebuttons[v:FindFirstChild("SurfaceGui"):FindFirstChild("TextLabel").Text] = v
+                codebuttons[v:WaitForChild("SurfaceGui"):WaitForChild("TexlLabel").Text] = v
             end
         end
     end
@@ -205,7 +203,8 @@ local function getfinalcode()
         lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = Part.CFrame
         wait(1)
         anchoredcheck()
-        Part:FindFirstChildWhichIsA("RemoteEvent"):FireServer()
+        Part:WaitForChild("ClickEvent"):FireServer()
+        wait(1)
     end
 
     return finalcode
@@ -216,15 +215,15 @@ local bluekey = folder:WaitForChild("BlueKey"):WaitForChild("Item")
 local PurpleKey = folder:WaitForChild("PurpleKey"):WaitForChild("Item")
 local Screwdriver = folder:WaitForChild("Screwdriver"):WaitForChild("Item")
 
+Wires()
+Collect(WireEvent:WaitForChild("Door"),folder:WaitForChild("GreenKey"):WaitForChild("Item"))
+Collect(SafeEvents:WaitForChild("GreenSafe"):WaitForChild("Door"),folder:WaitForChild("GreenWire"):WaitForChild("Item"))
+depositwire("GreenWire")
 getcode()
 repeat task.wait() until bluekey.Transparency == 0
 Collect(BlueSafeDoor,bluekey)
 Collect(BlueSafeDoor,folder:WaitForChild("BlueWire"):WaitForChild("Item"))
 depositwire("BlueWire")
-Wires()
-Collect(WireEvent:WaitForChild("Door"),folder:WaitForChild("GreenKey"):WaitForChild("Item"))
-Collect(SafeEvents:WaitForChild("GreenSafe"):WaitForChild("Door"),folder:WaitForChild("GreenWire"):WaitForChild("Item"))
-depositwire("GreenWire")
 local hint = Instance.new("Hint",game:FindService("CoreGui"))
 hint.Text = "Please complete the color task to continue automation"
 repeat task.wait() until PurpleKey.Transparency == 0
