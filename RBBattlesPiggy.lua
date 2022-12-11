@@ -2,6 +2,7 @@
 local function getfolder()
     local storage
     repeat
+        task.wait()
         for i,v in next, workspace:GetChildren() do
             if v:IsA("Folder") and tonumber(v.Name) then
                 storage = v
