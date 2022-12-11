@@ -12,6 +12,7 @@ local function getfolder()
 end
 
 local lp = game:FindService("Players").LocalPlayer
+local rs = game:FindService("RunService")
 local folder = getfolder()
 local ItemFolder = lp:WaitForChild("PlayerInfoFolder"):WaitForChild("ItemFolder")
 local Space = workspace:WaitForChild("Space")
