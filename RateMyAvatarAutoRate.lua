@@ -4,6 +4,7 @@ local configs = getgenv().configs or {
 }
 
 local rating = tostring(configs["rating"])
+local numrating = tonumber(rating)
 local autoserverhop = tostring(configs["autoserverhop"])
 
 local Players = game:FindService("Players")
@@ -13,7 +14,7 @@ local PostRating = game:GetService("ReplicatedStorage"):WaitForChild("PostRating
 
 local function rate(plr)
     if plr ~= lp then
-        PostRating:FireServer(plr,rating)
+        PostRating:FireServer(plr,numrating)
     end
 end
 
