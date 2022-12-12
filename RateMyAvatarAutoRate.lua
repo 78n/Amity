@@ -34,7 +34,7 @@ if autoserverhop:match("true") then
         local function jsone(str) return http:JSONEncode(str) end
         local function jsond(str) return http:JSONDecode(str) end
 
-        queueteleport(("getgenv().configs = {autoserverhop = %s,rating = %s} loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RBBattles.lua'))()"):format(autoserverhop,rating))
+        queueteleport(("getgenv().configs = {autoserverhop = %s,rating = %s} loadstring(game:HttpGet('https://github.com/78n/Amity/blob/main/RateMyAvatarAutoRate.lua'))()"):format(autoserverhop,rating))
         local TeleportService = game:GetService("TeleportService")
     
         local cursor = ''
