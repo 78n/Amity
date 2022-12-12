@@ -1,6 +1,6 @@
 local configs = getgenv().configs or {
     autoserverhop = "true",
-    rating = "0"
+    rating = "1"
 }
 
 local rating = tostring(configs["rating"])
