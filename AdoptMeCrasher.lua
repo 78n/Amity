@@ -18,7 +18,7 @@ task.spawn(function()
 end)
 
 while task.wait(0.1) do
-    for i = 1,100 do
+    for i = 1,200 do
         task.spawn(functioninquestion)
     end
 end
