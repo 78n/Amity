@@ -16,5 +16,5 @@ repeat
     if lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart then
         lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = sections:WaitForChild("finishEvent"):WaitForChild("door"):WaitForChild("doorActivate").CFrame * CFrame.new(0,50,0)
     end
-    task.spawn()
+    task.wait()
 until not game
