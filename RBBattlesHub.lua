@@ -1,3 +1,4 @@
+--If you got this script from robloxscripts.com use v3rmillion instead they did not get permission to post it there
 local PlaceId = game.PlaceId
 local games = {
     [11702621548] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesPiggy.lua")),
