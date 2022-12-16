@@ -4,7 +4,8 @@ local games = {
     [6447798030] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesFNF.lua")),
     [11775705000] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesShoppingWars.lua")),
     [11704734733] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesWackyWizards.lua")),
-    [7227293156] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesTowerofHell.lua"))
+    [7227293156] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesTowerofHell.lua")),
+    [11828780714] = loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/RBBattlesArsenal.lua"))
 }
 
 if games[PlaceId] then
