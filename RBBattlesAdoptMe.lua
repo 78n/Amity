@@ -9,7 +9,7 @@ for i,v in next, MainMap:WaitForChild("Podiums"):GetChildren() do
     end
 end
 
-rs.Heartbeat:Connect(function()
+game:FindService("RunService").Heartbeat:Connect(function()
     repeat task.wait() until lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
     lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart.CFrame = MainMap:WaitForChild("TrophyRig"):WaitForChild("RootPart").CFrame
     CommitCollection:FireServer({pet_accessories = {rb_battles_trophy_hat = {date_acquired = os.time()}}})
