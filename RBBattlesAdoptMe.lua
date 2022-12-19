@@ -1,7 +1,10 @@
+local hint = Instance.new("Hint",game:FindService("CoreGui"))
+hint.Text = "Go to the main map"
 local lp = game:FindService("Players").LocalPlayer
 local CommitCollection = getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init,4)["JournalAPI/CommitCollection"]
 
 local MainMap = workspace:WaitForChild("Interiors"):WaitForChild("MainMap/Default")
+hint:Destroy()
 for i,v in next, MainMap:WaitForChild("Podiums"):GetChildren() do
     if v:IsA("Model") then
         repeat task.wait() until lp.Character and lp.Character:FindFirstChildWhichIsA("Humanoid") and lp.Character:FindFirstChildWhichIsA("Humanoid").RootPart
