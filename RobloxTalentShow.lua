@@ -1,4 +1,5 @@
 if syn and syn.request then request = syn.request end
+local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 local TeleportService = game:GetService("TeleportService")
 local http = game:GetService("HttpService")
 local rs = game:FindService("RunService")
@@ -33,10 +34,13 @@ end
 
 for i,v in next, ObstacleCourses:GetChildren() do
     if v:IsA("Model") and v.Name:find("ObstacleCourse") then
+        repeat task.wait() until v:FindFirstChildWhichIsA("BasePart")
         collectrep(v:FindFirstChildWhichIsA("BasePart"))
     end
 end
-    
+
+if not request or not queueteleport then return end
+
 while cursor and #servers == 0 do
     local req = request({Url = ('https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s'):format(PlaceId,cursor)})
     local body = jsond(req.Body)
@@ -56,7 +60,9 @@ while cursor and #servers == 0 do
     end
     task.wait()
 end
-    
+
+queueteleport([[loadstring(game:HttpGet('https://raw.githubusercontent.com/78n/Amity/main/RobloxTalentShow.lua'))()]])
+
 while #servers > 0 do
     TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], lp)
     task.wait(1)
