@@ -3,7 +3,9 @@ local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or flux
 local TeleportService = game:GetService("TeleportService")
 local http = game:GetService("HttpService")
 local rs = game:FindService("RunService")
-local lp = game:FindService("Players").LocalPlayer
+local Players = game:FindService("Players")
+repeat task.wait() until Players.LocalPlayer --localplayer wouldnt be created :(
+local lp = Players.LocalPlayer
 local PlaceId = game.PlaceId
 local cursor = ''
 local servers = {}
