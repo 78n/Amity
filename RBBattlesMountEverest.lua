@@ -1,4 +1,4 @@
-local Players = game:FindService("Players").LocalPlayer
+local lp = game:FindService("Players").LocalPlayer
 game:GetService("ReplicatedStorage"):WaitForChild("VitalityBridge"):FireServer("dmg",{dmg=0/0,r="falling"})
 lp.Character:FindFirstChildWhichIsA("Humanoid").WalkSpeed = 50
 lp.Character:FindFirstChildWhichIsA("Humanoid").JumpHeight = 15
