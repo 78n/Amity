@@ -8,7 +8,7 @@ end)
 lp.Character:FindFirstChildWhichIsA("Humanoid"):GetPropertyChangedSignal("JumpHeight"):Connect(function()
     lp.Character:FindFirstChildWhichIsA("Humanoid").JumpHeight = 15
 end)
-
+lp.Character:WaitForChild("FlingPreventer").Disabled = true
 lp:GetMouse().KeyDown:Connect(function(Key)
     if Key == " " then
         lp.Character:FindFirstChildWhichIsA('Humanoid'):ChangeState(3)
