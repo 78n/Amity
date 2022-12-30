@@ -10,7 +10,8 @@ local games = {
     [9049840490] = "https://raw.githubusercontent.com/78n/Amity/main/RBBattlesSonicSpeedSimulator.lua",
     [920587237] = "https://raw.githubusercontent.com/78n/Amity/main/RBBattlesAdoptMe.lua",
     [537413528] = "https://raw.githubusercontent.com/78n/Amity/main/RBBattlesBuildABoatForTreasure.lua",
-    [606849621] = "https://raw.githubusercontent.com/78n/Amity/main/RBBattlesJailBreak.lua"
+    [606849621] = "https://raw.githubusercontent.com/78n/Amity/main/RBBattlesJailBreak.lua",
+    [3145447020] = 'https://raw.githubusercontent.com/78n/Amity/main/RBBattlesMountEverest.lua'
 }
 
 if games[PlaceId] then
