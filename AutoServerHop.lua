@@ -7,7 +7,7 @@ local PlaceId = game.PlaceId
 local JobId = game.JobId
 local PlaceIdString = tostring(PlaceId)
 
-local folderpath = "ServerHoper"
+local folderpath = "ServerHopper"
 local PlaceFolder = folderpath.."\\"..PlaceIdString
 local JobIdStorage = PlaceFolder.."\\JobIdStorage.json"
 local CodeToExecute = PlaceFolder.."\\Code.lua"
