@@ -83,7 +83,7 @@ local succ,err = pcall(function()
     loadstring(readfile(CodeToExecute))()
 end)
 if not succ then
-    rconsoleprint(err)
+    rconsoleprint("An Error has occursed\nPlease Check: "..CodeToExecute.."\nError:\n"..err)
     return
 end
 
