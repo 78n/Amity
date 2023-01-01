@@ -46,11 +46,12 @@ if not isfile(CodeToExecute) then
     print("Created CodeToExecute",CodeToExecute)
     return 
 end
-code = loadstring(readfile(CodeToExecute))
 
 if not table.find(data['JobIds'],JobId) then
     table.insert(data['JobIds'],JobId)
 end
+
+writefile(JobIdStorage,jsone(data))
 
 repeat task.wait() until game:IsLoaded() and Players.LocalPlayer
 
@@ -78,14 +79,15 @@ while cursor and #servers <= 0 do
     end
     task.wait()
 end
-
-for i,v in next, data["JobIds"] do
-    if not servers[v] then
-        table.remove(data,i)
-    end
+local succ,err = pcall(function()
+    loadstring(readfile(CodeToExecute))()
+end)
+if not succ then
+    rconsoleprint(err)
+    return
 end
 
-writefile(JobIdStorage,jsone(data))
+queueteleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/Amity/main/AutoServerHop.lua"))()]])
 
 while #servers > 0 do
     local random = servers[math.random(1,#servers)]
