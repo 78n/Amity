@@ -6,7 +6,9 @@ local rs = game:GetService("RunService")
 local lp = Players.LocalPlayer
 
 ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RolesService"):WaitForChild("__comm__"):WaitForChild("RE"):WaitForChild("SetRole"):FireServer("Janitor")
-ReplicatedStorage:WaitForChild("Events"):WaitForChild("Equip"):FireServer(ReplicatedStorage:WaitForChild("Tools"):WaitForChild("Mop"))
+if not lp.Backpack:FindFirstChild("Mop") then
+    ReplicatedStorage:WaitForChild("Events"):WaitForChild("Equip"):FireServer(ReplicatedStorage:WaitForChild("Tools"):WaitForChild("Mop"))
+end
 
 local Garbage = workspace:WaitForChild("Garbage")
 workspace.FallenPartsDestroyHeight = 0/0 --lazy
@@ -47,6 +49,3 @@ Garbage.ChildAdded:Connect(clean)
 for i,v in next, Garbage:GetChildren() do
     clean(v)
 end
-
-wait(10)
-hint:Destroy()
