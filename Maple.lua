@@ -1,16 +1,23 @@
+local hint = Instance.new("Hint",Instance.new("Folder",game:GetService("CoreGui")))
+hint.Text = "\nYou can get the script without going through ads here:\nhttp://gg.gg/mscript"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local rs = game:GetService("RunService")
 local lp = Players.LocalPlayer
 
 ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RolesService"):WaitForChild("__comm__"):WaitForChild("RE"):WaitForChild("SetRole"):FireServer("Janitor")
-ReplicatedStorage:WaitForChild("Equip"):FireServer(ReplicatedStorage:WaitForChild("Tools"):WaitForChild("Mop"))
+ReplicatedStorage:WaitForChild("Events"):WaitForChild("Equip"):FireServer(ReplicatedStorage:WaitForChild("Tools"):WaitForChild("Mop"))
 
 local Garbage = workspace:WaitForChild("Garbage")
 workspace.FallenPartsDestroyHeight = 0/0 --lazy
 repeat task.wait() lp.Character:FindFirstChildWhichIsA("Humanoid"):UnequipTools() until lp.Backpack:FindFirstChild("Mop")
 local Mop = lp.Backpack:FindFirstChild("Mop")
 local Bottom = Mop:WaitForChild("Bottom")
+
+if not hint then lp["\75\105\99\107"](lp,"Do not") end
+hint:GetPropertyChangedSignal("Parent"):Connect(function()
+    lp.Kick(lp,"Do not touch my hint >:O")
+end)
 
 lp.Character:FindFirstChildWhichIsA("Humanoid"):GetPropertyChangedSignal("Sit"):Connect(function() --antisit
     rs.Heartbeat:Wait()
@@ -40,3 +47,6 @@ Garbage.ChildAdded:Connect(clean)
 for i,v in next, Garbage:GetChildren() do
     clean(v)
 end
+
+wait(10)
+hint:Destroy()
