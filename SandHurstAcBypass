@@ -1,0 +1,66 @@
+--SandHurst more like poop hurst
+
+if getgenv().acbypass then return end
+getgenv().acbypass = {debugmode=false}
+
+local CoreGui = game:GetService("CoreGui")
+local getupvalue = getupvalue or debug.getupvalue
+local collectedgarbage = getgc(false)
+local info = debug.info
+local CachedFunctions = {}
+local FoundFunctions = {}
+
+local function notify(msg,length)
+    local notification = Instance.new("Hint",CoreGui)
+    notification.Text =  msg
+    task.spawn(task.delay,length,notification.Destroy,notification)
+end
+
+for i,v in next, collectedgarbage do
+    if typeof(v) == "function" then
+        local SourceScript = rawget(getfenv(v),"script")
+        if SourceScript and typeof(SourceScript) == "Instance" then
+            if SourceScript:IsA("ModuleScript") and not SourceScript.Parent then
+                table.insert(CachedFunctions,v)
+            end
+        end 
+    end
+end
+
+for i,v in next, CachedFunctions do
+    local source = info(v,"s")
+    local upvalue
+    pcall(function()
+        upvalue = getupvalue(v,1)
+    end)
+
+    if (upvalue and typeof(upvalue) == "Instance") or (source and source:lower():find("payrent")) then
+        FoundFunctions[i] = {
+            func = v
+        }
+    end
+end
+
+for i,v in next, collectedgarbage do
+    if typeof(v) == "function" then
+        local Found = FoundFunctions[rawget(getfenv(v),"script")]
+        if Found and not v ~= Found.func then
+            FoundFunctions[i] = {
+                func = v
+            }
+        end
+    end
+end
+
+notify("Found functions: "..#FoundFunctions,5)
+
+for i,v in next, FoundFunctions do
+    local func = v.func
+    local funcname = info(func,"n")
+    hookfunction(func,function()
+        if getgenv().acbypass then
+            warn(funcname,"Attempted to fire")
+        end
+    end)
+    notify("\nhooked function: "..funcname,0.05)
+end
