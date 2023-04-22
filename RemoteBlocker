@@ -1,0 +1,41 @@
+local remote = path_to_remote
+
+if not remote then return end
+
+local GetDebugId = game.GetDebugId
+local IsA = game.IsA -- to avoid using a namecall inside of a namecall loop
+local namecall
+
+local get_thread_identity = (syn and syn.get_thread_identity) or getthreadidentity
+local set_thread_identity = (syn and syn.set_thread_identity) or setidentity
+
+local cloneref = cloneref or function(...: any)
+    return ...
+end
+
+local function GetId(remote: Instance)
+    local old = get_thread_identity()
+    set_thread_identity(8)
+    local DebugId = GetDebugId(remote)
+    set_thread_identity(old)
+    return DebugId
+end
+
+remote = cloneref(remote)
+local RemoteDebugId = GetDebugId(remote)
+
+namecall = hookmetamethod(game,"__namecall",newcclosure(function(...)
+    local self = ...
+    if typeof(self) == "Instance" then
+        self = cloneref(self)
+        local method = getnamecallmethod()
+        if method and (IsA(self,"RemoteEvent") and (method == "FireServer" or method == "fireServer") or IsA(self,"RemoteFunction") and (method == "InvokeServer" or method == "invokeServer")) then
+            local DebugId = GetId(self)
+            if DebugId and DebugId == RemoteDebugId then
+                --local args = {select(2,...)} -- I would recommend using weak tables to avoid detections but it's up to you
+                return --namecall(self,unpack(args)) --Unpack can be detected but I've got no other method to fire it
+            end
+        end
+    end
+    return namecall(...)
+end))
