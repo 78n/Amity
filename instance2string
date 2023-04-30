@@ -1,0 +1,210 @@
+assert(getproperties,"Missing function")
+    
+if target and typeof(target) == "Instance" then
+    xpcall(function()
+        Instance.new(target.ClassName):Destroy()
+        local Players = game:GetService("Players")
+            
+        local function getplayer(instance)
+            for _, v in next, Players:GetPlayers() do
+                if v.Character and (instance:IsDescendantOf(v.Character) or instance == v.Character) then
+                    return v
+                end
+            end
+        end
+            
+        local function i2p(i)
+            local player = getplayer(i)
+            local parent = i
+            local out = ""
+            if parent == nil then
+                return "nil"
+            elseif player then
+                while true do
+                    if parent and parent == player.Character then
+                        if Players.LocalPlayer and player == Players.LocalPlayer then
+                            return 'game:GetService("Players").LocalPlayer.Character' .. out
+                        else
+                            return i2p(player) .. ".Character" .. out
+                        end
+                    else
+                        if parent.Name:match("[%a_]+[%w+]*") ~= parent.Name then
+                            out = ':FindFirstChild(' .. parent.Name .. ')' .. out
+                        else
+                            out = "." .. parent.Name .. out
+                        end
+                    end
+                    task.wait()
+                    parent = parent.Parent
+                end
+            elseif parent ~= game then
+                while true do
+                    if parent and parent.Parent == game then
+                        if game:GetService(parent.ClassName) then
+                            if string.lower(parent.ClassName) == "workspace" then
+                                return "workspace"..out
+                            else
+                                return 'game:GetService("' .. parent.ClassName .. '")' .. out
+                            end
+                        else
+                            if parent.Name:match("[%a_]+[%w_]*") then
+                                return "game." .. parent.Name .. out
+                            else
+                                return 'game:FindFirstChild(' .. parent.Name .. ')' .. out
+                            end
+                        end
+                    else
+                        if parent.Name:match("[%a_]+[%w_]*") ~= parent.Name then
+                            out = ':WaitForChild(' .. parent.Name .. ')' .. out
+                        else
+                            out = ':WaitForChild("' .. parent.Name .. '")'..out
+                        end
+                    end
+                    if Players.LocalPlayer and i:IsDescendantOf(Players.LocalPlayer) then
+                        return 'game:GetService("Players").LocalPlayer'..out
+                    end
+                    parent = parent.Parent
+                    task.wait()
+                end
+            else
+                return "game"
+            end
+        end
+            
+        local ufunctions = {
+            NumberSequence = function(u)
+                return ("NumberRange.new(%s, %s)"):format(tostring(u.Min),tostring(u.Max))
+            end,
+            ColorSequence = function(u)
+                local ret = "ColorSequence.new("
+                for i, v in next, u.KeyPoints do
+                    ret = ret ..("Color3.new(%s)"):format(tostring(v))
+                    if i < #u.Keypoints then
+                        ret = ret .. ", "
+                    end
+                end
+                return ret .. ")"
+            end,
+            BrickColor = function(u)
+                return ("BrickColor.new(%s)"):format(tostring(u.Number))
+            end,
+            NumberRange = function(u)
+                return ("NumberRange.new(%s, %s)"):format(tostring(u.Min),tostring(u.Max))
+            end,
+            Region3 = function(u)
+                local center = u.CFrame.Position
+                local centersize = u.Size
+                
+                return ("Region3.new(%s, %s)"):format(v2s(center-centersize/2),v2s(center+centersize/2))
+            end,
+            Faces = function(u)
+                local faces = {}
+                if u.Top then
+                    table.insert(faces, "Top")
+                end
+                if u.Bottom then
+                    table.insert(faces, "Enum.NormalId.Bottom")
+                end
+                if u.Left then
+                    table.insert(faces, "Enum.NormalId.Left")
+                end
+                if u.Right then
+                    table.insert(faces, "Enum.NormalId.Right")
+                end
+                if u.Back then
+                    table.insert(faces, "Enum.NormalId.Back")
+                end
+                if u.Front then
+                    table.insert(faces, "Enum.NormalId.Front")
+                end
+                return ("Faces.new(%s)"):format(table.concat(faces, ", "))
+            end,
+            EnumItem = function(u)
+                return tostring(u)
+            end,
+            Enums = function(u)
+                return "Enum"
+            end,
+            Enum = function(u)
+                return "Enum." .. tostring(u)
+            end,
+            Vector3 = function(u)
+                return ("Vector3.new(%s)"):format(tostring(u):gsub("nan","0/0"))
+            end,
+            Vector2 = function(u)
+                return ("Vector2.new(%s)"):format(tostring(u))
+            end,
+            CFrame = function(u)
+                return ("CFrame.new(%s)"):format(tostring(u))
+            end,
+            UDim = function(u)
+                return ("UDim.new(%s)"):format(tostring(u))
+            end,
+            UDim2 = function(u)
+                return ("UDim2.new(%s"):format(tostring(u))
+            end,
+            Rect = function(u)
+                return ("Rect.new(%s)"):format(tostring(u))
+            end,
+            Color3 = function(u)
+                return ("Color3.fromRGB(%s, %s, %s)"):format(u.r*255,u.g*255,u.b*255)
+            end
+        }
+            
+        local number_table = {
+            ["inf"] = "math.huge",
+            ["-inf"] = "-math.huge",
+            ["nan"] = "0/0"
+        }
+            
+        local typeofv2sfunctions = {
+            number = function(v)
+                local number = tostring(v)
+                return number_table[number] or number
+            end,
+            boolean = function(v)
+                return tostring(v)
+            end,
+            string = function(v)
+                return '"'..v..'"'
+            end,
+            Instance = function(v)
+                return i2p(v)
+            end
+        }
+            
+        local typev2sfunctions = {
+            userdata = function(v,vtypeof)
+                if ufunctions[vtypeof] then
+                    return ufunctions[vtypeof](v)
+                end
+                return ("%s(%s) --[[Generation Failure]]"):format(vtypeof,tostring(v))
+            end,
+            vector = function(v)
+                return ("Vector3.new(%s)"):format(tostring(v):gsub("nan","0/0"))
+            end
+        }
+            
+        local function v2s(v)
+            local func = typeofv2sfunctions[typeof(v)]
+            local typefunc = typev2sfunctions[type(v)]
+                
+            if func then
+                return func(v)
+            elseif typefunc then
+                return typefunc(v,typeof(v))
+            end
+            return ("%s(%s) --[[Generation Failure]]"):format(typeof(v),tostring(v))
+        end
+        
+        local temp = "\n"
+        for i,v in next, getproperties(target) do
+            temp = temp..'\t["'..i..'"] = '..v2s(v)..",\n"
+        end
+        setclipboard("local function Create(instance: string,properties: table) local obj = Instance.new(instance) for i,v in next, properties do pcall(function() obj[i] = v end) end return obj end\n\nCreate('"..target.ClassName.."',{"..temp:gsub(",$","").."})")
+    end,function(err)
+        warn("An error has occured:\n",err)
+    end)
+else
+    error("Instance Expected got ",target and typeof(target) or "nil")
+end
