@@ -1,4 +1,5 @@
-if not getgenv().configs.loader then
+local connections = getgenv().configs and getgenv().configs.connection
+if connections then
     local Disable = configs.Disable
     for i,v in connections do
         v:Disconnect() 
@@ -6,12 +7,10 @@ if not getgenv().configs.loader then
     Disable:Fire()
     Disable:Destroy()
     table.clear(configs)
-else
-    getgenv().configs.loader = nil
 end
 
 local Disable = Instance.new("BindableEvent")
-getgenv().configs = configs or {
+getgenv().configs = {
     connections = {},
     Disable = Disable,
     Size = Vector3.new(10,10,10),
