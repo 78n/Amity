@@ -128,21 +128,27 @@ newindexhook = hookmetamethod(game,"__newindex",function(self,index,newindex)
 end)
 
 function WalkSpeedSpoof:Disable()
+    self:RestoreWalkSpeed()
     hookmetamethod(game,"__index",indexhook)
     hookmetamethod(game,"__newindex",newindexhook)
     hookfunction(Instance.new,OldInstancenew)
     GetDebugIdHandler:Destroy()
     TempHumanoid:Destroy()
-    table.clear(WalkSpeedSpoof)
+    table.clear(self)
+    getgenv().WalkSpeedSpoof = nil
 end
 
-function WalkSpeedSpoof:SetWalkSpeed(speed)
-    local Humanoid = CurrentHumanoid or (function()
+function WalkSpeedSpoof:GetHumanoid()
+    return CurrentHumanoid or (function()
         local char = lp.Character
         local Humanoid = char and char:FindFirstChildWhichIsA("Humanoid") or nil
 
         return Humanoid and cloneref(Humanoid)
     end)()
+end
+
+function WalkSpeedSpoof:SetWalkSpeed(speed)
+    local Humanoid = self:GetHumanoid()
 
     if Humanoid then
         local connections = {}
@@ -159,6 +165,18 @@ function WalkSpeedSpoof:SetWalkSpeed(speed)
         Humanoid.WalkSpeed = speed
         for i,v in connections do
             v:Enable()
+        end
+    end
+end
+
+function WalkSpeedSpoof:RestoreWalkSpeed()
+    local Humanoid = self:GetHumanoid()
+    
+    if Humanoid then
+        local cached = cachedhumanoids[Humanoid:GetDebugId()]
+
+        if cached then
+            self:SetWalkSpeed(cached.lastnewindex or cached.currentindex)
         end
     end
 end
