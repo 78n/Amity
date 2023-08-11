@@ -54,15 +54,6 @@ local function GetWalkSpeed(obj: any): number
     return TempHumanoid.WalkSpeed
 end
 
-local OldInstancenew
-OldInstancenew = hookfunction(Instance.new,newcclosure(function(classname,...)
-    local obj = old(classname,...)
-    if typeof(obj) == "Instance" and obj:IsA("Humanoid") then
-        table.insert(FakeHumanoids,obj)
-    end
-    return obj
-end))
-
 indexhook = hookmetamethod(game,"__index",function(self,index)
     if not checkcaller() and typeof(self) == "Instance" then
         if self:IsA("Humanoid") and not find(FakeHumanoids,self) then
@@ -133,7 +124,6 @@ function WalkSpeedSpoof:Disable()
     WalkSpeedSpoof:RestoreWalkSpeed()
     hookmetamethod(game,"__index",indexhook)
     hookmetamethod(game,"__newindex",newindexhook)
-    hookfunction(Instance.new,OldInstancenew)
     GetDebugIdHandler:Destroy()
     TempHumanoid:Destroy()
     table.clear(WalkSpeedSpoof)
