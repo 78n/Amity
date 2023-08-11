@@ -34,7 +34,6 @@ local TempHumanoid = Instance.new("Humanoid")
 
 local cachedhumanoids = {}
 
-local CurrentHumanoidDebugId
 local CurrentHumanoid
 local newindexhook
 local indexhook
@@ -52,6 +51,14 @@ local function GetWalkSpeed(obj: any): number
     return TempHumanoid.WalkSpeed
 end
 
+function cachedhumanoids:cacheHumanoid(DebugId: string,Humanoid: Humanoid)
+    cachedhumanoids[DebugId] = {
+        currentindex = indexhook(Humanoid,"WalkSpeed"),
+        lastnewindex = nil
+    }
+    return self[DebugId]
+end
+
 indexhook = hookmetamethod(game,"__index",function(self,index)
     if not checkcaller() and typeof(self) == "Instance" then
         if self:IsA("Humanoid") then
@@ -64,11 +71,7 @@ indexhook = hookmetamethod(game,"__index",function(self,index)
 
                     if cleanindex == "WalkSpeed" then
                         if not cached then
-                            cachedhumanoids[DebugId] = {
-                                currentindex = indexhook(self,index),
-                                lastnewindex = nil
-                            }
-                            cached = cachedhumanoids[DebugId]
+                            cached = cachedhumanoids:cacheHumanoid(DebugId,self)
                         end
 
                         if not (CurrentHumanoid and CurrentHumanoid:IsDescendantOf(game)) then
@@ -97,11 +100,7 @@ newindexhook = hookmetamethod(game,"__newindex",function(self,index,newindex)
 
                     if cleanindex == "WalkSpeed" then
                         if not cached then
-                            cachedhumanoids[DebugId] = {
-                                currentindex = indexhook(self,index),
-                                lastnewindex = nil
-                            }
-                            cached = cachedhumanoids[DebugId]
+                            cached = cachedhumanoids:cacheHumanoid(DebugId,self)
                         end
 
                         if not (CurrentHumanoid and CurrentHumanoid:IsDescendantOf(game)) then
@@ -132,8 +131,11 @@ function WalkSpeedSpoof:GetHumanoid()
     return CurrentHumanoid or (function()
         local char = lp.Character
         local Humanoid = char and char:FindFirstChildWhichIsA("Humanoid") or nil
-
-        return Humanoid and cloneref(Humanoid)
+        
+        if Humanoid then
+            cachedhumanoids:cacheHumanoid(Humanoid:GetDebugId(),Humanoid)
+            return cloneref(Humanoid)
+        end
     end)()
 end
 
