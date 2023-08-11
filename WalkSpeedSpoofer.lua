@@ -28,12 +28,10 @@ end
 local lp = cloneref(Players.LocalPlayer)
 
 local split = string.split
-local find = table.find
 
 local GetDebugIdHandler = Instance.new("BindableFunction")
 local TempHumanoid = Instance.new("Humanoid")
 
-local FakeHumanoids = setmetatable({},{__mode = "v"})
 local cachedhumanoids = {}
 
 local CurrentHumanoidDebugId
@@ -56,7 +54,7 @@ end
 
 indexhook = hookmetamethod(game,"__index",function(self,index)
     if not checkcaller() and typeof(self) == "Instance" then
-        if self:IsA("Humanoid") and not find(FakeHumanoids,self) then
+        if self:IsA("Humanoid") then
             local DebugId = GetDebugId(self)
             local cached = cachedhumanoids[DebugId]
 
@@ -89,7 +87,7 @@ end)
 
 newindexhook = hookmetamethod(game,"__newindex",function(self,index,newindex)
     if not checkcaller() and typeof(self) == "Instance" then
-        if self:IsA("Humanoid") and not find(FakeHumanoids,self) then
+        if self:IsA("Humanoid") then
             local DebugId = GetDebugId(self)
             local cached = cachedhumanoids[DebugId]
 
